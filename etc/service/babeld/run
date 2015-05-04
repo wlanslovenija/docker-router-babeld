@@ -1,0 +1,23 @@
+#!/bin/bash -e
+
+if [ -z "${ROUTER_INTERFACES}" ]; then
+  echo "ERROR: No interfaces specified."
+  exit 1
+fi
+
+# Configure babeld
+BABELD_CONFIG=/etc/babeld.conf
+echo "local-port 33123" > ${BABELD_CONFIG}
+echo "export-table 254" >> ${BABELD_CONFIG}
+echo "import-table 254" >> ${BABELD_CONFIG}
+
+ifaces=""
+for iface in ${ROUTER_INTERFACES}; do
+  echo "interface ${iface} wired true" >> ${BABELD_CONFIG}
+  echo "redistribute local if ${iface} allow" >> ${BABELD_CONFIG}
+done
+
+echo "redistribute local deny" >> ${BABELD_CONFIG}
+
+exec /usr/sbin/babeld -c /etc/babeld.conf 2>&1
+
