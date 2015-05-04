@@ -5,11 +5,17 @@ if [ -z "${ROUTER_INTERFACES}" ]; then
   exit 1
 fi
 
+BABELD_TABLE_ID=${BABELD_TABLE_ID:-21}
+BABELD_TABLE_PRIO=${BABELD_TABLE_PRIO:-950}
+
+# Configure routing policy
+ip rule add from all lookup ${BABELD_TABLE_ID} prio ${BABELD_TABLE_PRIO}
+
 # Configure babeld
 BABELD_CONFIG=/etc/babeld.conf
 echo "local-port 33123" > ${BABELD_CONFIG}
-echo "export-table 254" >> ${BABELD_CONFIG}
-echo "import-table 254" >> ${BABELD_CONFIG}
+echo "export-table ${BABELD_TABLE_ID}" >> ${BABELD_CONFIG}
+echo "import-table ${BABELD_TABLE_ID}" >> ${BABELD_CONFIG}
 
 ifaces=""
 for iface in ${ROUTER_INTERFACES}; do
