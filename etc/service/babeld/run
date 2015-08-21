@@ -28,5 +28,8 @@ done
 
 echo "redistribute local deny" >> ${BABELD_CONFIG}
 
+# Remove stale pidfile.
+rm -f /var/run/babeld.pid
+
 exec /usr/sbin/babeld -c /etc/babeld.conf 2>&1
 
