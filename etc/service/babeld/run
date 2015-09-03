@@ -7,12 +7,16 @@ fi
 
 BABELD_TABLE_ID=${BABELD_TABLE_ID:-21}
 BABELD_TABLE_PRIO=${BABELD_TABLE_PRIO:-950}
+BABELD_DEFAULT_TABLE_ID=${BABELD_DEFAULT_TABLE_ID:-31}
+BABELD_DEFAULT_TABLE_PRIO=${BABELD_DEFAULT_TABLE_PRIO:-1100}
 
 # Configure routing policy
 ip rule del from all to 172.17.0.0/16 lookup main || true 2>/dev/null
 ip rule add from all to 172.17.0.0/16 lookup main prio 100
 ip rule del from all lookup ${BABELD_TABLE_ID} || true 2>/dev/null
 ip rule add from all lookup ${BABELD_TABLE_ID} prio ${BABELD_TABLE_PRIO}
+ip rule del from all lookup ${BABELD_DEFAULT_TABLE_ID} || true 2>/dev/null
+ip rule add from all lookup ${BABELD_DEFAULT_TABLE_ID} prio ${BABELD_DEFAULT_TABLE_PRIO}
 
 # Configure babeld
 BABELD_CONFIG=/etc/babeld.conf
@@ -26,6 +30,7 @@ for iface in ${ROUTER_INTERFACES}; do
   echo "redistribute local if ${iface} allow" >> ${BABELD_CONFIG}
 done
 
+echo "export ip 0.0.0.0/0 le 0 table ${BABELD_DEFAULT_TABLE_ID}" >> ${BABELD_CONFIG}
 echo "redistribute local deny" >> ${BABELD_CONFIG}
 
 # Remove stale pidfile.
