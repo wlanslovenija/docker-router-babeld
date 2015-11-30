@@ -1,6 +1,4 @@
-FROM wlanslovenija/runit
-
-MAINTAINER Jernej Kos <jernej@kos.mx>
+FROM tozd/runit
 
 RUN apt-get update -q -q && apt-get install iproute2 --yes --force-yes
 
