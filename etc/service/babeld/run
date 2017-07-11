@@ -33,6 +33,11 @@ done
 echo "install ip 0.0.0.0/0 le 0 table ${BABELD_DEFAULT_TABLE_ID}" >> ${BABELD_CONFIG}
 echo "redistribute local deny" >> ${BABELD_CONFIG}
 
+# Increase the metric of announced routes
+if [ "${BABELD_DISABLE_ANNOUNCE}" == "1" ]; then
+  echo "out metric 99" >> ${BABELD_CONFIG}
+fi
+
 # Remove stale pidfile.
 rm -f /var/run/babeld.pid
 
