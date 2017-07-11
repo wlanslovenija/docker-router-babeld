@@ -30,7 +30,7 @@ for iface in ${ROUTER_INTERFACES}; do
   echo "redistribute local if ${iface} allow" >> ${BABELD_CONFIG}
 done
 
-echo "export ip 0.0.0.0/0 le 0 table ${BABELD_DEFAULT_TABLE_ID}" >> ${BABELD_CONFIG}
+echo "install ip 0.0.0.0/0 le 0 table ${BABELD_DEFAULT_TABLE_ID}" >> ${BABELD_CONFIG}
 echo "redistribute local deny" >> ${BABELD_CONFIG}
 
 # Remove stale pidfile.
