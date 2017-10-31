@@ -11,8 +11,8 @@ BABELD_DEFAULT_TABLE_ID=${BABELD_DEFAULT_TABLE_ID:-31}
 BABELD_DEFAULT_TABLE_PRIO=${BABELD_DEFAULT_TABLE_PRIO:-1100}
 
 # Configure routing policy
-ip rule del from all to 172.17.0.0/16 lookup main || true 2>/dev/null
-ip rule add from all to 172.17.0.0/16 lookup main prio 500
+ip rule del from all to 172.16.0.0/12 lookup main || true 2>/dev/null
+ip rule add from all to 172.16.0.0/12 lookup main prio 500
 ip rule del from all lookup ${BABELD_TABLE_ID} || true 2>/dev/null
 ip rule add from all lookup ${BABELD_TABLE_ID} prio ${BABELD_TABLE_PRIO}
 ip rule del from all lookup ${BABELD_DEFAULT_TABLE_ID} || true 2>/dev/null
